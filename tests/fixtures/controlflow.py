@@ -47,13 +47,14 @@ def temp_controlflow_defaults(tmp_path, monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def reset_defaults_after_each_test(monkeypatch):
+def reset_defaults_before_each_test(monkeypatch):
     """
-    Monkeypatch defaults to themselves, which will automatically reset them after every test
+    Monkeypatch defaults to themselves, which will automatically reset them before every test
     """
     for k, v in controlflow.defaults.__dict__.items():
         monkeypatch.setattr(controlflow.defaults, k, v)
-    yield
+    yield # <-- This is where execution is paused and given back to the test
+    # This is where the teardown code goes
 
 
 @pytest.fixture()

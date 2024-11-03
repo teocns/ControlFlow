@@ -102,6 +102,7 @@ skip-magic-trailing-comma = false
 [tool.pytest.ini_options]
 timeout = 120
 asyncio_mode = "auto"
+addopts = "-s"
 norecursedirs = [
     "*.egg-info",
     ".git",

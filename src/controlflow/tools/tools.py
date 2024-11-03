@@ -8,7 +8,7 @@ import langchain_core.tools
 import pydantic
 from langchain_core.messages import InvalidToolCall, ToolCall
 from prefect.utilities.asyncutils import run_coro_as_sync
-from pydantic import Field, PydanticSchemaGenerationError, TypeAdapter
+from pydantic import Field, PydanticSchemaGenerationError, TypeAdapter, computed_field
 
 import controlflow
 from controlflow.utilities.general import ControlFlowModel, unwrap
@@ -300,9 +300,13 @@ def output_to_string(output: Any) -> str:
 class ToolResult(ControlFlowModel):
     tool_call_id: str
     result: Any = Field(exclude=True, repr=False)
-    str_result: str = Field(repr=False)
     is_error: bool = False
     tool_metadata: dict = {}
+
+    @computed_field(repr=False, return_type=str)
+    @property
+    def str_result(self):
+        return output_to_string(self.result)
 
 
 def handle_tool_call(
@@ -342,7 +346,6 @@ def handle_tool_call(
     return ToolResult(
         tool_call_id=tool_call["id"],
         result=fn_output,
-        str_result=output_to_string(fn_output),
         is_error=is_error,
         tool_metadata=tool.metadata if tool else {},
     )
@@ -383,7 +386,6 @@ async def handle_tool_call_async(tool_call: ToolCall, tools: list[Tool]) -> Any:
     return ToolResult(
         tool_call_id=tool_call["id"],
         result=fn_output,
-        str_result=output_to_string(fn_output),
         is_error=is_error,
         tool_metadata=tool.metadata if tool else {},
     )

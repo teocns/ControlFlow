@@ -3,14 +3,7 @@ import logging
 import random
 import warnings
 from contextlib import AbstractContextManager, contextmanager
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    AsyncGenerator,
-    Generator,
-    Optional,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, AsyncGenerator, Generator, Optional, Union
 
 from langchain_core.language_models import BaseChatModel
 from pydantic import (

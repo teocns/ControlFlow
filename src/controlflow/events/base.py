@@ -16,7 +16,7 @@ IN_MEMORY_STORE = {}
 
 
 class Event(ControlFlowModel):
-    model_config: ConfigDict = ConfigDict(extra="forbid")
+    model_config: ConfigDict = ConfigDict(extra="ignore")
 
     event: str
     id: str = Field(default_factory=lambda: uuid.uuid4().hex)
